@@ -24,7 +24,9 @@ Page({
     nowTemp: '14°',
     nowWeather: '晴天',
     nowWeatherBackground: '',
-    hourlyWeather: []
+    hourlyWeather: [],
+    todayDate: '',
+    todayTemp: '',
   },
 
   /**
@@ -58,10 +60,20 @@ Page({
         let result = res.data.result
         this.setNow(result)
         this.setHourlyWeather(result)
+        this.setToday(result);
       },
       complete: () => {
         callback && callback()
       }
+    })
+  },
+
+  setToday(result){
+    let date = new Date()
+    let today = result.today
+    this.setData({
+      todayTemp: today.minTemp + '° - '  + today.maxTemp + '°',
+      todayDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 今天'
     })
   },
 
@@ -97,6 +109,12 @@ Page({
     hourlyWeather[0].time = '现在'
     this.setData({
       hourlyWeather: hourlyWeather
+    })
+  },
+  onTapDayWeather() {
+    // wx.showToast({})
+    wx.navigateTo({
+      url: '/pages/list/list',
     })
   }
 })
