@@ -17,6 +17,17 @@ const weatherColorMap = {
 
 const QQMapWX = require('../../libs/qqmap-wx-jssdk.js')
 var qqmapsdk;
+
+
+const UNPROMPTED = 0 
+const UNAUTHORIZED = 1
+const AUTHORIZED = 2
+
+const UNPROMPTED_TIPS = "点击获取当前位置"
+const UNAUTHORIZED_TIPS = "点击开启位置权限"
+const AUTHORIZED_TIPS = ""
+
+
 Page({
 
   /**
@@ -30,7 +41,8 @@ Page({
     todayDate: '',
     todayTemp: '',
     city: '北京市',
-    locationTips: '点击获取当期位置'
+    locationTips: UNPROMPTED_TIPS,
+    loactionAuthType: UNPROMPTED
   },
 
   /**
@@ -51,7 +63,23 @@ Page({
       key: '7GTBZ-3U2EV-3LFPY-UGJ6B-ZVZ5F-HAB6V'
     })
   },
+  onShow: function() {
 
+      // 获取设置信息
+      wx.getSetting({
+        success: res => {
+          let auth = res.authSetting['scope.userLocation']
+          if (auth && this.data.loactionAuthType != AUTHORIZED) {
+            // 权限从无到有
+            this.setData({
+              locationAuthType: AUTHORIZED,
+              locationTips: AUTHORIZED_TIPS
+            })
+            this.getLocation()
+          }
+        }
+      })
+  },
   // 获取网络数据，callback是匿名函数做参数
   getNow(callback) {
     wx.request({
@@ -130,14 +158,25 @@ Page({
 
   // 获取位置
   onGetLocation() {
+    // 未授权，进入设置页面
+    if (this.data.locationAuthType == UNAUTHORIZED) {
+      wx.openSetting()
+    } else {
+      this.getLocation()
+    }
+  },
+  // 获取逆地理编码
+  getLocation() {
+    // 在回调函数中使用this会出错
     var that = this;
     wx.getLocation({
-      success: function(res) {
+      success: function (res) {
 
         let lat = res.latitude
         let long = res.longitude
         that.setData({
-          locationTips: ""
+          locationAuthType: AUTHORIZED,
+          locationTips: AUTHORIZED_TIPS
         })
         qqmapsdk.reverseGeocoder({
           location: {
@@ -152,7 +191,14 @@ Page({
             that.getNow()
           }
         })
+      },
+      fail: () => {
+        that.setData({
+          locationAuthType: UNAUTHORIZED,
+          locationTips: UNAUTHORIZED_TIPS
+        })
       }
     })
   }
+
 })
