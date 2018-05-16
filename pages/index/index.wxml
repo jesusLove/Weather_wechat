@@ -1,7 +1,7 @@
 <view class='weather-wrapper'>
 
-  <view class='location-wrapper'>
-    <view class='location' bindtap='onTapLocation'>
+  <view class='location-wrapper' bindtap='onTapLocation'>
+    <view class='location'>
       <image class='location-icon' src='/asserts/location-icon.png'></image>
       <view class='location-text'>{{ city }}</view>
     </view>
