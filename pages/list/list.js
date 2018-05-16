@@ -22,7 +22,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options.city)
+    
     this.setData({
       city: options.city
     })
@@ -55,7 +55,6 @@ Page({
   },
   // 刷新数据
   setWeakWeather(result) {
-    console.log(result)
 
     let weakWeather = []
     for (let i = 0; i < 7; i += 1) {

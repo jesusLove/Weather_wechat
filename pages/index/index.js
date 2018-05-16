@@ -21,12 +21,7 @@ var qqmapsdk;
 
 const UNPROMPTED = 0 
 const UNAUTHORIZED = 1
-const AUTHORIZED = 2
-
-const UNPROMPTED_TIPS = "点击获取当前位置"
-const UNAUTHORIZED_TIPS = "点击开启位置权限"
-const AUTHORIZED_TIPS = ""
-
+const AUTHORIZED = 2;
 
 Page({
 
@@ -41,7 +36,6 @@ Page({
     todayDate: '',
     todayTemp: '',
     city: '北京市',
-    locationTips: UNPROMPTED_TIPS,
     loactionAuthType: UNPROMPTED
   },
 
@@ -66,8 +60,7 @@ Page({
       success: res => {
         let auth = res.authSetting['scope.userLocation']
         this.setData({
-          locationAuthType: auth ? AUTHORIZED : (auth === false) ? UNAUTHORIZED : UNPROMPTED,
-          locationTips: auth ? AUTHORIZED_TIPS : (auth === false) ? UNAUTHORIZED_TIPS : UNPROMPTED_TIPS
+          locationAuthType: auth ? AUTHORIZED : (auth === false) ? UNAUTHORIZED : UNPROMPTED
         })
         if (auth) {
           this.getCityAndWeather()
@@ -77,18 +70,7 @@ Page({
       }
     })
   },
-  // onShow: function() {
 
-  //     // 获取设置信息
-  //     wx.getSetting({
-  //       success: res => {
-  //         let auth = res.authSetting['scope.userLocation']
-  //         if (auth) {
-  //           this.getCityAndWeather()
-  //         }
-  //       }
-  //     })
-  // },
   // 获取网络数据，callback是匿名函数做参数
   getNow(callback) {
     wx.request({
@@ -103,8 +85,7 @@ Page({
         let result = res.data.result
         this.setNow(result)
         this.setHourlyWeather(result)
-        this.setToday(result);
-        console.log(result)
+        this.setToday(result)
       },
       complete: () => {
         callback && callback()
@@ -166,7 +147,7 @@ Page({
   },
 
   // 获取位置
-  onGetLocation() {
+  onTapLocation() {
     // 未授权，进入设置页面
     if (this.data.locationAuthType == UNAUTHORIZED) {
       
@@ -193,8 +174,7 @@ Page({
         let lat = res.latitude
         let long = res.longitude
         that.setData({
-          locationAuthType: AUTHORIZED,
-          locationTips: AUTHORIZED_TIPS
+          locationAuthType: AUTHORIZED
         })
         qqmapsdk.reverseGeocoder({
           location: {
@@ -212,8 +192,7 @@ Page({
       },
       fail: () => {
         that.setData({
-          locationAuthType: UNAUTHORIZED,
-          locationTips: UNAUTHORIZED_TIPS
+          locationAuthType: UNAUTHORIZED
         })
       }
     })
