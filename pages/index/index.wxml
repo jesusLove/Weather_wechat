@@ -1,12 +1,24 @@
 <view class='weather-wrapper'>
+
+  <view class='location-wrapper'>
+    <view class='location'>
+      <image class='location-icon' src='/asserts/location-icon.png'></image>
+      <view class='location-text'>{{ city }}</view>
+    </view>
+     <view class='location-tips'  bindtap='onGetLocation'>{{locationTips}}</view> 
+  </view>
+
+
   <view class="temp">{{ nowTemp }}</view>
   <view class='weather'>{{ nowWeather }}</view>
   <image src='{{ nowWeatherBackground }}' class='weather-bg' mode='scaleToFill'></image> 
+  
   <view class='day-weather' bindtap='onTapDayWeather'>
     <view class='day-text'>{{todayDate}}</view>
     <view class='temp-text'>{{todayTemp}}</view>
     <image class='arrow-icon' src='/asserts/arrow.png'></image>
   </view>
+
 </view>
 <view class='timetips'>
   <image class='timetips-icon' src='/asserts/time-icon.png'></image>

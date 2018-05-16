@@ -12,10 +12,37 @@
 }
 .weather-wrapper {
   position: relative;
-  padding-top: 174rpx;
+  padding-top: 20rpx;
   padding-bottom: 250rpx;
   /* background-color: moccasin; */
 }
+
+.loction-wrapper {
+  margin-bottom: 60rpx;
+  font-size: 30rpx;
+  line-height: 42rpx;
+}
+.location {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.location-icon {
+  margin-right: 10rpx;
+  width: 21rpx;
+  height: 30rpx;
+}
+.location-text {
+  opacity: 0.5;
+}
+ .location-tips {
+  margin-top: 10rpx;
+  text-align: center;
+  height: 42rpx;
+  opacity: 0.5;
+} 
+
+
 .weather-bg {
   position: absolute;
   top: 0;

@@ -14,13 +14,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    weakWeather: []
+    weakWeather: [],
+    city: '北京市'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options.city)
+    this.setData({
+      city: options.city
+    })
     this.getData()
   },
   onPullDownRefresh: function () {
@@ -33,7 +38,7 @@ Page({
     wx.request({
       url: 'https://test-miniprogram.com/api/weather/future',
       data: {
-        city: '青岛市',
+        city: this.data.city,
         time: new Date() .getTime()
       },
       header: {

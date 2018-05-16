@@ -15,6 +15,8 @@ const weatherColorMap = {
   'snow': '#aae1fc'
 }
 
+const QQMapWX = require('../../libs/qqmap-wx-jssdk.js')
+var qqmapsdk;
 Page({
 
   /**
@@ -27,6 +29,8 @@ Page({
     hourlyWeather: [],
     todayDate: '',
     todayTemp: '',
+    city: '北京市',
+    locationTips: '点击获取当期位置'
   },
 
   /**
@@ -43,6 +47,9 @@ Page({
    */
   onLoad: function (options) {
     this.getNow()
+    qqmapsdk = new QQMapWX({
+      key: '7GTBZ-3U2EV-3LFPY-UGJ6B-ZVZ5F-HAB6V'
+    })
   },
 
   // 获取网络数据，callback是匿名函数做参数
@@ -50,17 +57,17 @@ Page({
     wx.request({
       url: 'https://test-miniprogram.com/api/weather/now',
       data: {
-        city: '青岛市'
+        city: this.data.city
       },
       header: {
         'content-type': 'application/json'
       },
       success: res => {
-        console.log(res.data)
         let result = res.data.result
         this.setNow(result)
         this.setHourlyWeather(result)
         this.setToday(result);
+        console.log(result)
       },
       complete: () => {
         callback && callback()
@@ -94,6 +101,7 @@ Page({
       backgroundColor: weatherColorMap[weather],
     })
   },
+
   // 未来几个小时天气
   setHourlyWeather(result) {
     let forecast = result.forecast
@@ -111,10 +119,40 @@ Page({
       hourlyWeather: hourlyWeather
     })
   },
+
+  
   onTapDayWeather() {
     // wx.showToast({})
     wx.navigateTo({
-      url: '/pages/list/list',
+      url: '/pages/list/list?city=' + this.data.city,
+    })
+  },
+
+  // 获取位置
+  onGetLocation() {
+    var that = this;
+    wx.getLocation({
+      success: function(res) {
+
+        let lat = res.latitude
+        let long = res.longitude
+        that.setData({
+          locationTips: ""
+        })
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: lat,
+            longitude: long
+          },
+          success: res => {
+            let city = res.result.address_component.city
+            that.setData({
+              city: city
+            })
+            that.getNow()
+          }
+        })
+      }
     })
   }
 })
