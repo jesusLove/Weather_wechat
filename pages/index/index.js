@@ -58,9 +58,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getNow()
+    
     qqmapsdk = new QQMapWX({
       key: '7GTBZ-3U2EV-3LFPY-UGJ6B-ZVZ5F-HAB6V'
+    })
+    wx.getSetting({
+      success: res => {
+        let auth = res.authSetting['scope.userLocation']
+        this.setData({
+          locationAuthType: auth ? AUTHORIZED : (auth === false) ? UNAUTHORIZED : UNPROMPTED,
+          locationTips: auth ? AUTHORIZED_TIPS : (auth === false) ? UNAUTHORIZED_TIPS : UNPROMPTED_TIPS
+        })
+        if (auth) {
+          this.getCityAndWeather()
+        } else {
+          this.getNow()
+        }
+      }
     })
   },
   // onShow: function() {
@@ -70,7 +84,7 @@ Page({
   //       success: res => {
   //         let auth = res.authSetting['scope.userLocation']
   //         if (auth) {
-  //           this.getLocation()
+  //           this.getCityAndWeather()
   //         }
   //       }
   //     })
@@ -160,17 +174,17 @@ Page({
         success: res => {
           let auth = res.authSetting['scope.userLocation']
           if (auth) {
-            this.getLocation()
+            this.getCityAndWeather()
           }
         }
       })
 
     } else {
-      this.getLocation()
+      this.getCityAndWeather()
     }
   },
   // 获取逆地理编码
-  getLocation() {
+  getCityAndWeather () {
     // 在回调函数中使用this会出错
     var that = this;
     wx.getLocation({
