@@ -63,23 +63,18 @@ Page({
       key: '7GTBZ-3U2EV-3LFPY-UGJ6B-ZVZ5F-HAB6V'
     })
   },
-  onShow: function() {
+  // onShow: function() {
 
-      // 获取设置信息
-      wx.getSetting({
-        success: res => {
-          let auth = res.authSetting['scope.userLocation']
-          if (auth && this.data.loactionAuthType != AUTHORIZED) {
-            // 权限从无到有
-            this.setData({
-              locationAuthType: AUTHORIZED,
-              locationTips: AUTHORIZED_TIPS
-            })
-            this.getLocation()
-          }
-        }
-      })
-  },
+  //     // 获取设置信息
+  //     wx.getSetting({
+  //       success: res => {
+  //         let auth = res.authSetting['scope.userLocation']
+  //         if (auth) {
+  //           this.getLocation()
+  //         }
+  //       }
+  //     })
+  // },
   // 获取网络数据，callback是匿名函数做参数
   getNow(callback) {
     wx.request({
@@ -160,7 +155,16 @@ Page({
   onGetLocation() {
     // 未授权，进入设置页面
     if (this.data.locationAuthType == UNAUTHORIZED) {
-      wx.openSetting()
+      
+      wx.openSetting({
+        success: res => {
+          let auth = res.authSetting['scope.userLocation']
+          if (auth) {
+            this.getLocation()
+          }
+        }
+      })
+
     } else {
       this.getLocation()
     }
