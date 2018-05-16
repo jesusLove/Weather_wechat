@@ -1,0 +1,11 @@
+{
+  "pages":[
+    "pages/index/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#cbeefd",
+    "navigationBarTitleText": "天气小程序",
+    "navigationBarTextStyle":"black"
+  }
+}
