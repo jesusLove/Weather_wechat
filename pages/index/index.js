@@ -56,6 +56,7 @@ Page({
     qqmapsdk = new QQMapWX({
       key: '7GTBZ-3U2EV-3LFPY-UGJ6B-ZVZ5F-HAB6V'
     })
+    //  获取用户权限设置
     wx.getSetting({
       success: res => {
         let auth = res.authSetting['scope.userLocation']

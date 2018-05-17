@@ -22,6 +22,8 @@
   </view>
 
 </view>
+
+
 <view class='timetips'>
   <image class='timetips-icon' src='/asserts/time-icon.png'></image>
   <view class='timetips-text'>未来24小时的天气预测</view>
